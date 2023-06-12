@@ -1,65 +1,33 @@
-pipeline {
+pipeline{
     agent any
-    environment { 
-        name = 'Mudassir'
-    }
-    parameters {
-        string(name: 'PERSON', defaultValue: 'Mr Danish', description: 'Who should I say hello to?')
-        choice(name: 'CHOICE', choices: ['One', 'Two', 'Three'], description: 'Pick something')
-    }
-    stages {
-        stage('Run a Command') {
-            steps {
-                sh 'date'
-            }
+
+    stages{
+        stage("A"){
+            steps{
+                sh 'echo "========executing A========"'
+                sh 'echo "BUILD_ID = ${BUILD_ID}"'
+            }           
         }
-        stage('Run multiple commands') {
-            steps {
-                sh '''
-                ls
-                date
-                pwd
-                '''
-            }
+        stage("B"){
+            steps{
+                echo "========executing B========"
+            }           
         }
-        stage('Global Environment Variable') {
-            environment { 
-            lastName = 'Farooq'
-            }
-            steps {
-                sh 'echo "Build id = ${BUILD_ID}"'
-                sh 'echo "First name = ${name}"'
-                sh 'echo "Last name = ${lastName}"'
-            }
-        }
-        stage('Scope base environment Variable') {
-            steps {
-                sh 'echo "First name = ${name}"'
-                sh 'echo "Last name = ${lastName}"'
-            }
-        }
-        stage('Build with parameters and user input') {
-            input {
-                message "Should we continue?"
-                ok "Yes, we should."
-            }
-            steps {
-                sh '''
-                echo "User name is ${PERSON}"
-                echo "Entered choice is ${CHOICE}"
-                '''
-            }
+        stage("C"){
+            steps{
+                echo "========executing C========"
+            }           
         }
     }
-    post { 
-        always { 
-            echo 'I will always say Hello again!'
+    post{
+        always{
+            echo "========always========"
         }
-        failure{ 
-            echo 'I will say failure...'
+        success{
+            echo "========pipeline executed successfully ========"
         }
-        success{ 
-            echo 'I will say success!'
+        failure{
+            echo "========pipeline execution failed========"
         }
     }
 }
